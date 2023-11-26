@@ -1,6 +1,5 @@
 import random as r
 import itertools
-from json import dumps
 
 class Filler_check():
 	# def __init__(self, board, capt_pos = [(6,0)]):
@@ -83,7 +82,8 @@ def gen_board():
 	for i in range(boards_y+1):
 		x_list = ["o" for i in range(boards_x+1)]
 		board.append(x_list)
-	col_list = ["prp", "blk", "blu", "yel", "red", "grn"]
+	col_list = ["🟪", "⬛", "🟦", "🟨", "🟥", "🟩"]
+	# col_list = ["prp", "blk", "blu", "yel", "red", "grn"]
 	for i in range(len(board)-1):
 		for j in range(len(board[i])-1):
 			color = r.choice(col_list)
@@ -100,7 +100,8 @@ def gen_board():
 	return board
 
 def gen_itter(depth):
-	col_list = ["prp", "blk", "blu", "yel", "red", "grn"]
+	col_list = ["🟪", "⬛", "🟦", "🟨", "🟥", "🟩"]
+	# col_list = ["prp", "blk", "blu", "yel", "red", "grn"]
 	itt1 = list(itertools.product(col_list, repeat = depth))
 	list_to_remove = []
 	for i in range(len(itt1)):
@@ -114,8 +115,8 @@ def gen_itter(depth):
 	return itt1
 
 def pretty_print(board):
-	for i in range(len(board)):
-		print(board[i])
+	for row in board:
+		print("".join(row))
 
 def class_dict(board, itt, depth, capt_pos):
 	itt_res_dict = {}
@@ -148,8 +149,6 @@ def class_dict(board, itt, depth, capt_pos):
 	sorted_dict = {k: v for k, v in a}
 	# print(sorted_dict)
 	# print(type(sorted_dict))
-	pretty = dumps(sorted_dict, indent=4)
-	# print(pretty)
 
 	print("--------")
 	print("top 20 best keys:")
@@ -158,9 +157,15 @@ def class_dict(board, itt, depth, capt_pos):
 	# list of best captured positions:
 	best_capt_list = []
 
-
+	order_list = []
 	while i > 0:
-		print(list(sorted_dict.keys())[-i])
+		for char in list(sorted_dict.keys())[-i]:
+			if char in "🟪⬛🟦🟨🟥🟩":
+				order_list.append(char)
+
+		# print(list(sorted_dict.keys())[-i])
+		print(" -> ".join(order_list))
+		order_list.clear()
 		print(f"\t{list(sorted_dict.values())[-i]}\n")
 		best_capt_list.append(list(sorted_dict.values())[-i][1])
 		i -= 1
@@ -174,9 +179,9 @@ def class_dict(board, itt, depth, capt_pos):
 
 def main():
 
-	# gen_board() can be used to generate randoma filler board
-
-	board = [['prp', 'grn', 'red', 'grn', 'yel', 'red', 'grn', 'yel'], ['yel', 'red', 'blu', 'red', 'prp', 'blk', 'prp', 'red'], ['grn', 'blu', 'blk', 'prp', 'blu', 'prp', 'red', 'blk'], ['blu', 'yel', 'grn', 'blk', 'yel', 'grn', 'blu', 'red'], ['red', 'prp', 'blu', 'red', 'prp', 'blk', 'yel', 'blu'], ['blk', 'grn', 'red', 'blk', 'yel', 'blu', 'grn', 'prp'], ['prp', 'blu', 'prp', 'yel', 'prp', 'blk', 'prp', 'blk']]
+	# board = gen_board() # can be used to generate randoma filler board
+	board = [['🟪', '🟩', '🟥', '🟩', '🟨', '🟥', '🟩', '🟨'], ['🟨', '🟥', '🟦', '🟥', '🟪', '⬛', '🟪', '🟥'], ['🟩', '🟦', '⬛', '🟪', '🟦', '🟪', '🟥', '⬛'], ['🟦', '🟨', '🟩', '⬛', '🟨', '🟩', '🟦', '🟥'], ['🟥', '🟪', '🟦', '🟥', '🟪', '⬛', '🟨', '🟦'], ['⬛', '🟩', '🟥', '⬛', '🟨', '🟦', '🟩', '🟪'], ['🟪', '🟦', '🟪', '🟨', '🟪', '⬛', '🟪', '⬛']]
+	# board = [['prp', 'grn', 'red', 'grn', 'yel', 'red', 'grn', 'yel'], ['yel', 'red', 'blu', 'red', 'prp', 'blk', 'prp', 'red'], ['grn', 'blu', 'blk', 'prp', 'blu', 'prp', 'red', 'blk'], ['blu', 'yel', 'grn', 'blk', 'yel', 'grn', 'blu', 'red'], ['red', 'prp', 'blu', 'red', 'prp', 'blk', 'yel', 'blu'], ['blk', 'grn', 'red', 'blk', 'yel', 'blu', 'grn', 'prp'], ['prp', 'blu', 'prp', 'yel', 'prp', 'blk', 'prp', 'blk']]
 	pretty_print(board)
 
 	# change the depth of your search, depth above 6 will take a long time, because my search method is very primative
